@@ -1,0 +1,22 @@
+#
+# add-executor-service-cache.cli
+#
+# WARNING: After executing this command, newly created target cluster must be restarted, because cache store is not activated on-the-fly.
+#
+
+batch
+
+# Add cache configuration.
+
+/subsystem=datagrid-infinispan/cache-container=clustered/configurations=CONFIGURATIONS/distributed-cache-configuration=executorServiceCache:add(mode=SYNC, start=EAGER)
+
+# Add custom store to cache configuration.
+
+/subsystem=datagrid-infinispan/cache-container=clustered/configurations=CONFIGURATIONS/distributed-cache-configuration=executorServiceCache/store=STORE:add(class=com.redhat.example.jdg.store.ExecutorServiceStore)
+
+# Add custom cache for cache control.
+
+/subsystem=datagrid-infinispan/cache-container=clustered/distributed-cache=executorServiceCache:add(configuration=executorServiceCache)
+
+# Execute batch.
+run-batch
